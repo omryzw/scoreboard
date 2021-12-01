@@ -9,29 +9,52 @@ class App extends Component {
           {
             name: "Guil",
             id: 1,
+            score:0
           },
           {
             name: "Treasure",
             id: 2,
+            score:0
           },
           {
             name: "Ashley",
             id: 3,
+            score:0
           },
           {
             name: "James",
             id: 4,
+            score:0
           },
         ],
     }
 
-    handleRemovePlayer = (id) => {
-        this.setState( previousState => {
-            return {
-            players: previousState.players.filter( p => p.id !== id ),
-            };
-        });
+    handleScoreChange = (index,delta) => {
+      this.setState( prevState => ({
+              score: prevState.players[index].score += delta,
+      }));
+
+};
+
+    handleScoreChange = (index, delta) => {
+      this.setState( prevState => {
+        // New 'players' array – a copy of the previous `players` state
+        const updatedPlayers = [ ...prevState.players ];
+        // A copy of the player object we're targeting
+        const updatedPlayer = { ...updatedPlayers[index] };
+  
+        // Update the target player's score
+        updatedPlayer.score += delta;
+        // Update the 'players' array with the target player's latest score
+        updatedPlayers[index] = updatedPlayer;
+  
+        // Update the `players` state without mutating the original state
+        return {
+          players: updatedPlayers
+        };
+      });
     }
+  
 
 
     render() {
@@ -39,8 +62,15 @@ class App extends Component {
             <div className="scoreboard">
               <Header title="Scoreboard" totalPlayers={this.state.players.length} />
               {/* start of players list */}
-              {this.state.players.map((player) => (
-                <Player name={player.name} key={player.id.toString()} removePlayer= {this.handleRemovePlayer} id ={player.id} />
+              {this.state.players.map((player,index) => (
+                <Player 
+                name={player.name} 
+                index = {index}
+                score={player.score} 
+                key={player.id.toString()} 
+                removePlayer= {this.handleRemovePlayer} 
+                changeScore={this.handleScoreChange} 
+                id ={player.id} />
               ))}
             </div>
           );
