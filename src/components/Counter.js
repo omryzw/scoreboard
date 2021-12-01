@@ -1,6 +1,6 @@
-import React
- from "react";
-class Counter extends React.Component {
+import React ,{Component} from "react";
+
+export default class Counter extends Component {
 
     state = {
       score: 0,
@@ -34,4 +34,3 @@ class Counter extends React.Component {
   }
   
 
-  export default Counter;
