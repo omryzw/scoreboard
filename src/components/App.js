@@ -1,7 +1,7 @@
 import React ,{Component} from "react";
 import Header from "./Header";
 import Player from "./Player";
-
+import AddPlayerForm from "./AddPlayerForm";
 class App extends Component {
 
     state = {
@@ -29,13 +29,7 @@ class App extends Component {
         ],
     }
 
-    handleScoreChange = (index,delta) => {
-      this.setState( prevState => ({
-              score: prevState.players[index].score += delta,
-      }));
-
-};
-
+  
     handleScoreChange = (index, delta) => {
       this.setState( prevState => {
         // New 'players' array – a copy of the previous `players` state
@@ -54,13 +48,39 @@ class App extends Component {
         };
       });
     }
+
+    handleRemovePlayer = (id) => {
+      this.setState( prevState => {
+        return {
+          players: prevState.players.filter( p => p.id !== id )
+        }
+      });
+    }
+
+    handleAddPlayer = (name) => {
+      this.setState( prevState => {
+        return {
+          players: [
+            ...prevState.players,
+            {
+              name,
+              score: 0,
+              id: Math.floor(Math.random() * 1000)
+            }
+          ]
+        }
+      });
+    }
+
   
 
 
     render() {
         return (
             <div className="scoreboard">
-              <Header title="Scoreboard" totalPlayers={this.state.players.length} />
+              <Header 
+              title="Scoreboard" 
+              players = {this.state.players} />
               {/* start of players list */}
               {this.state.players.map((player,index) => (
                 <Player 
@@ -72,6 +92,7 @@ class App extends Component {
                 changeScore={this.handleScoreChange} 
                 id ={player.id} />
               ))}
+              <AddPlayerForm addPlayer={this.handleAddPlayer}/>
             </div>
           );
         };
